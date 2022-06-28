@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class Grid : MonoBehaviour {
 
+	public bool onlyDisplayPathGizmos;
 	public LayerMask unwalkableMask;
 	public Vector2 gridWorldSize;
 	public float nodeRadius;
@@ -17,6 +18,12 @@ public class Grid : MonoBehaviour {
 		gridSizeX = Mathf.RoundToInt(gridWorldSize.x/nodeDiameter);
 		gridSizeY = Mathf.RoundToInt(gridWorldSize.y/nodeDiameter);
 		CreateGrid();
+	}
+
+	public int MaxSize {
+		get {
+			return gridSizeX * gridSizeY;
+		}
 	}
 
 	void CreateGrid() {
@@ -36,42 +43,45 @@ public class Grid : MonoBehaviour {
 		List<Node> neighbours = new List<Node>();
 
         //loop for adjacent movement, ignoring diagonals
-        for (int x = -1; x <= 1; x++)
-		{
-			for (int y = -1; y <= 1; y++)
-			{
-				if (x == 0 && y == 0 ||//centre
-					x ==-1 && y ==-1 ||//bottom left
-					x == 1 && y ==-1 ||//bottom right
-					x ==-1 && y == 1 ||//top left
-					x == 1 && y == 1)  //top right
-					continue;
+  //      for (int x = -1; x <= 1; x++)
+		//{
+		//	for (int y = -1; y <= 1; y++)
+		//	{
+		//		if (x == 0 && y == 0 ||//centre
+		//			x ==-1 && y ==-1 ||//bottom left
+		//			x == 1 && y ==-1 ||//bottom right
+		//			x ==-1 && y == 1 ||//top left
+		//			x == 1 && y == 1)  //top right
+		//			continue;
 
-				int checkX = node.gridX + x;
-				int checkY = node.gridY + y;
+		//		int checkX = node.gridX + x;
+		//		int checkY = node.gridY + y;
 
-				if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY)
-				{
-					neighbours.Add(grid[checkX, checkY]);
-				}
-			}
-		}
+		//		if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY)
+		//		{
+		//			neighbours.Add(grid[checkX, checkY]);
+		//		}
+		//	}
+		//}
 
         #region Diagonal inclusive pathfinding
         //######Un-comment this section and then comment out the for loop above this region to change pathfinding from square based to diagonal inclusive.
-        //for (int x = -1; x <= 1; x++) {
-        //	for (int y = -1; y <= 1; y++) {
-        //		if (x == 0 && y == 0)
-        //			continue;
+        for (int x = -1; x <= 1; x++)
+        {
+            for (int y = -1; y <= 1; y++)
+            {
+                if (x == 0 && y == 0)
+                    continue;
 
-        //		int checkX = node.gridX + x;
-        //		int checkY = node.gridY + y;
+                int checkX = node.gridX + x;
+                int checkY = node.gridY + y;
 
-        //		if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY) {
-        //			neighbours.Add(grid[checkX,checkY]);
-        //		}
-        //	}
-        //}
+                if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY)
+                {
+                    neighbours.Add(grid[checkX, checkY]);
+                }
+            }
+        }
         #endregion
 
         return neighbours;
@@ -92,14 +102,34 @@ public class Grid : MonoBehaviour {
 	public List<Node> path;
 	void OnDrawGizmos() {
 		Gizmos.DrawWireCube(transform.position,new Vector3(gridWorldSize.x,1,gridWorldSize.y));
+        if (onlyDisplayPathGizmos)
+        {
+            if (path != null)
+            {
+                foreach (Node n in path)
+                {
+					Gizmos.color = Color.black;
+					Gizmos.DrawCube(n.worldPosition, Vector3.one * (nodeDiameter - .1f));
 
-		if (grid != null) {
-			foreach (Node n in grid) {
-				Gizmos.color = (n.walkable)?Color.white:Color.red;
-				if (path != null)
-					if (path.Contains(n))
-						Gizmos.color = Color.black;
-				Gizmos.DrawCube(n.worldPosition, Vector3.one * (nodeDiameter-.1f));
+				}
+			}
+        }
+        else
+        {
+
+        
+			if (grid != null) 
+			{
+				foreach (Node n in grid) 
+				{
+					Gizmos.color = (n.walkable)?Color.white:Color.red;
+					if (path != null)
+						if (path.Contains(n))
+						{
+							Gizmos.color = Color.black;
+						}
+					Gizmos.DrawCube(n.worldPosition, Vector3.one * (nodeDiameter-.1f));
+				}	
 			}
 		}
 	}
