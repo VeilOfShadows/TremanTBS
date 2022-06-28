@@ -12,7 +12,7 @@ public class Pathfinding : MonoBehaviour {
 	}
 
 	void Update() {
-		FindPath (seeker.position, target.position);
+		FindPath(seeker.position, target.position);
 	}
 
 	void FindPath(Vector3 startPos, Vector3 targetPos) {

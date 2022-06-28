@@ -35,21 +35,46 @@ public class Grid : MonoBehaviour {
 	public List<Node> GetNeighbours(Node node) {
 		List<Node> neighbours = new List<Node>();
 
-		for (int x = -1; x <= 1; x++) {
-			for (int y = -1; y <= 1; y++) {
-				if (x == 0 && y == 0)
+        //loop for adjacent movement, ignoring diagonals
+        for (int x = -1; x <= 1; x++)
+		{
+			for (int y = -1; y <= 1; y++)
+			{
+				if (x == 0 && y == 0 ||//centre
+					x ==-1 && y ==-1 ||//bottom left
+					x == 1 && y ==-1 ||//bottom right
+					x ==-1 && y == 1 ||//top left
+					x == 1 && y == 1)  //top right
 					continue;
 
 				int checkX = node.gridX + x;
 				int checkY = node.gridY + y;
 
-				if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY) {
-					neighbours.Add(grid[checkX,checkY]);
+				if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY)
+				{
+					neighbours.Add(grid[checkX, checkY]);
 				}
 			}
 		}
 
-		return neighbours;
+        #region Diagonal inclusive pathfinding
+        //######Un-comment this section and then comment out the for loop above this region to change pathfinding from square based to diagonal inclusive.
+        //for (int x = -1; x <= 1; x++) {
+        //	for (int y = -1; y <= 1; y++) {
+        //		if (x == 0 && y == 0)
+        //			continue;
+
+        //		int checkX = node.gridX + x;
+        //		int checkY = node.gridY + y;
+
+        //		if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY) {
+        //			neighbours.Add(grid[checkX,checkY]);
+        //		}
+        //	}
+        //}
+        #endregion
+
+        return neighbours;
 	}
 	
 
