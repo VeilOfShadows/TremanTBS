@@ -9,6 +9,9 @@ public class Grid : MonoBehaviour {
 	public Vector2 gridWorldSize;
 	public float nodeRadius;
 	Node[,] grid;
+	public Pathfinding pathfindingScript;
+
+    public List<Node> movement;
 
 	float nodeDiameter;
 	int gridSizeX, gridSizeY;
@@ -39,38 +42,101 @@ public class Grid : MonoBehaviour {
 		}
 	}
 
-	public List<Node> GetNeighbours(Node node) {
-		List<Node> neighbours = new List<Node>();
+    public void GetMovementDistance()
+	{		
+		List<Node> movementNodes = new List<Node>();
+		Node startNode = NodeFromWorldPoint(pathfindingScript.seeker.position);
+		int speed = 5;
+        int stepcount = 0;
 
+        var tileForPreviousStep = new List<Node>();
+        tileForPreviousStep.Add(startNode);
+
+        while (stepcount < speed)
+        {
+            List<Node> neighbours = new List<Node>();
+
+            foreach (Node n in tileForPreviousStep)
+            {
+                neighbours.AddRange(GetNeighboursWalkable(n));
+            }
+
+            movementNodes.AddRange(neighbours);
+            tileForPreviousStep = neighbours;
+            stepcount++;           
+        }
+        movement = movementNodes;
+    }
+
+    public List<Node> GetNeighboursWalkable(Node node)
+    {
+        List<Node> neighbours = new List<Node>();
+
+        #region Non diagonal pathfinding
         //loop for adjacent movement, ignoring diagonals
-  //      for (int x = -1; x <= 1; x++)
-		//{
-		//	for (int y = -1; y <= 1; y++)
-		//	{
-		//		if (x == 0 && y == 0 ||//centre
-		//			x ==-1 && y ==-1 ||//bottom left
-		//			x == 1 && y ==-1 ||//bottom right
-		//			x ==-1 && y == 1 ||//top left
-		//			x == 1 && y == 1)  //top right
-		//			continue;
-
-		//		int checkX = node.gridX + x;
-		//		int checkY = node.gridY + y;
-
-		//		if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY)
-		//		{
-		//			neighbours.Add(grid[checkX, checkY]);
-		//		}
-		//	}
-		//}
-
-        #region Diagonal inclusive pathfinding
-        //######Un-comment this section and then comment out the for loop above this region to change pathfinding from square based to diagonal inclusive.
         for (int x = -1; x <= 1; x++)
         {
             for (int y = -1; y <= 1; y++)
             {
-                if (x == 0 && y == 0)
+                if (x == 0 && y == 0 ||//centre
+                    x == -1 && y == -1 ||//bottom left
+                    x == 1 && y == -1 ||//bottom right
+                    x == -1 && y == 1 ||//top left
+                    x == 1 && y == 1)  //top right
+                    continue;               
+
+                int checkX = node.gridX + x;
+                int checkY = node.gridY + y;
+
+                if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY)
+                {
+                    if (grid[checkX, checkY].walkable)
+                    {
+                        neighbours.Add(grid[checkX, checkY]);
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region Diagonal inclusive pathfinding
+        //######Un-comment this section and then comment out the for loop above this region to change pathfinding from square based to diagonal inclusive.
+        //for (int x = -1; x <= 1; x++)
+        //{
+        //    for (int y = -1; y <= 1; y++)
+        //    {
+        //        if (x == 0 && y == 0)
+        //            continue;
+
+        //        int checkX = node.gridX + x;
+        //        int checkY = node.gridY + y;
+
+        //        if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY)
+        //        {
+        //            neighbours.Add(grid[checkX, checkY]);
+        //        }
+        //    }
+        //}
+        #endregion
+
+        return neighbours;
+    }
+
+
+    public List<Node> GetNeighbours(Node node) {
+		List<Node> neighbours = new List<Node>();
+
+        #region Non diagonal pathfinding
+        //loop for adjacent movement, ignoring diagonals
+        for (int x = -1; x <= 1; x++)
+        {
+            for (int y = -1; y <= 1; y++)
+            {
+                if (x == 0 && y == 0 ||//centre
+                    x == -1 && y == -1 ||//bottom left
+                    x == 1 && y == -1 ||//bottom right
+                    x == -1 && y == 1 ||//top left
+                    x == 1 && y == 1)  //top right
                     continue;
 
                 int checkX = node.gridX + x;
@@ -82,6 +148,26 @@ public class Grid : MonoBehaviour {
                 }
             }
         }
+        #endregion
+
+        #region Diagonal inclusive pathfinding
+        //######Un-comment this section and then comment out the for loop above this region to change pathfinding from square based to diagonal inclusive.
+        //for (int x = -1; x <= 1; x++)
+        //{
+        //    for (int y = -1; y <= 1; y++)
+        //    {
+        //        if (x == 0 && y == 0)
+        //            continue;
+
+        //        int checkX = node.gridX + x;
+        //        int checkY = node.gridY + y;
+
+        //        if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY)
+        //        {
+        //            neighbours.Add(grid[checkX, checkY]);
+        //        }
+        //    }
+        //}
         #endregion
 
         return neighbours;
@@ -113,21 +199,34 @@ public class Grid : MonoBehaviour {
 
 				}
 			}
+            foreach (Node n in movement)
+            {                 
+                Gizmos.color = Color.green;
+                Gizmos.DrawWireCube(n.worldPosition, Vector3.one * (nodeDiameter - .1f));
+            }
         }
         else
-        {
-
-        
+        {        
 			if (grid != null) 
 			{
 				foreach (Node n in grid) 
 				{
 					Gizmos.color = (n.walkable)?Color.white:Color.red;
 					if (path != null)
+                    {
 						if (path.Contains(n))
 						{
 							Gizmos.color = Color.black;
 						}
+                    }
+                    if (movement.Contains(n))
+                    {
+						Gizmos.color = Color.green;
+                    }
+                    else
+                    {
+						continue;
+                    }
 					Gizmos.DrawCube(n.worldPosition, Vector3.one * (nodeDiameter-.1f));
 				}	
 			}
