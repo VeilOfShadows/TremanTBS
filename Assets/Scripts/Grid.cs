@@ -217,17 +217,18 @@ public class Grid : MonoBehaviour {
 						if (path.Contains(n))
 						{
 							Gizmos.color = Color.black;
-						}
+                            Gizmos.DrawCube(n.worldPosition, Vector3.one * (nodeDiameter - .1f));
+                        }
                     }
-                    if (movement.Contains(n))
-                    {
-						Gizmos.color = Color.green;
-                    }
-                    else
-                    {
-						continue;
-                    }
-					Gizmos.DrawCube(n.worldPosition, Vector3.one * (nodeDiameter-.1f));
+      //              if (movement.Contains(n))
+      //              {
+						//Gizmos.color = Color.green;
+      //              }
+      //              else
+      //              {
+						//continue;
+      //              }
+					Gizmos.DrawWireCube(n.worldPosition, Vector3.one * (nodeDiameter-.1f));
 				}	
 			}
 		}
