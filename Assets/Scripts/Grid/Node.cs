@@ -11,4 +11,5 @@ public class Node
     public bool isWalkable;
     public Vector3 worldPosition;
     public GridObject obstacle;
+    public GameObject tileViz;
 }
