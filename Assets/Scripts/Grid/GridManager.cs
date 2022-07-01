@@ -31,15 +31,9 @@ public class GridManager : MonoBehaviour
     public GameObject unit;
     public GameObject tileViz;
 
-    private void Start()
+    public void Init()
     {
-        ReadLevel();
-
-        Node n = GetNode(unit.transform.position);
-        if (n != null)
-        {
-            unit.transform.position = n.worldPosition;
-        }
+        ReadLevel();        
     }
 
     void ReadLevel()
@@ -182,7 +176,7 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    Node GetNode(Vector3 wp)
+    public Node GetNode(Vector3 wp)
     {
         //removes any offsets
         Vector3 p = wp - minPos;
@@ -193,7 +187,7 @@ public class GridManager : MonoBehaviour
         return GetNode(x, y, z);
     }
 
-    Node GetNode(int x, int y, int z)
+    public Node GetNode(int x, int y, int z)
     {
         if (x < 0 || x > pos_x - 1 || y < 0 || y > pos_y - 1 || z < 0 || z > pos_z -1)
         {

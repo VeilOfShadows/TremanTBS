@@ -12,4 +12,5 @@ public class Node
     public Vector3 worldPosition;
     public GridObject obstacle;
     public GameObject tileViz;
+    public GridCharacter character;
 }
