@@ -7,6 +7,7 @@ public abstract class StateManager : MonoBehaviour
     public State currentState;
     public bool forceExit;
 
+    public Node previousNode;
     public Node currentNode;
     public float delta;
 

@@ -11,15 +11,59 @@ public class SessionManager : MonoBehaviour
     int turnIndex;
     public float delta;
 
+    public LineRenderer pathViz;
+
+
     public GridManager gridManager;
 
     bool isInit;
 
+    bool isPathfinding;
+
+    public void PathfinderCall(Node targetNode)
+    {
+        if (!isPathfinding)
+        {
+            isPathfinding = true;
+
+            Node start = turns[0].player.characters[0].currentNode;
+            Node target = targetNode;
+
+            if (start != null && target != null)
+            {
+                PathfinderMaster.singleton.RequestPathFind(turns[0].player.characters[0],
+                    start, target, PathfinderCallback, gridManager);
+            }
+            else
+            {
+                isPathfinding = false;
+            }
+        }
+    }
+
+    void PathfinderCallback(List<Node> p, GridCharacter c)
+    {
+        isPathfinding = false;
+        if (p == null)
+        {
+            Debug.LogWarning("Path not valid");
+            return;
+        }
+
+        pathViz.positionCount = p.Count;
+        List<Vector3> allPositions = new List<Vector3>();
+        for (int i = 0; i < p.Count; i++)
+        {
+            allPositions.Add(p[i].worldPosition + Vector3.up * .1f);
+        }
+        pathViz.SetPositions(allPositions.ToArray());
+    }
+
     private void Start()
     {
         gridManager.Init();
-        InitStateManagers();
         PlaceUnits();
+        InitStateManagers();
         isInit = true;
     }
 
@@ -36,6 +80,7 @@ public class SessionManager : MonoBehaviour
         GridCharacter[] units = GameObject.FindObjectsOfType<GridCharacter>();
         foreach (GridCharacter u in units)
         {
+            u.OnInit();
             Node n = gridManager.GetNode(u.transform.position);
             if (n != null)
             {

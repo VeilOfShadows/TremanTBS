@@ -13,4 +13,16 @@ public class Node
     public GridObject obstacle;
     public GameObject tileViz;
     public GridCharacter character;
+
+    public float hCost;
+    public float gCost;
+    public float fCost
+    {
+        get 
+        { 
+            return gCost + hCost; 
+        }
+    }
+
+    public Node parentNode;
 }

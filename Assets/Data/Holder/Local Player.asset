@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Local Player
   m_EditorClassIdentifier: 
   stateManagerPrefab: {fileID: 3579605510277517889, guid: 19882c3b0f6247f4881ff803477f096f, type: 3}
-  characters: []
+  characters:
+  - {fileID: 0}

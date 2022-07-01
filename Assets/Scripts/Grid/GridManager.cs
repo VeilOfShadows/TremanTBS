@@ -31,8 +31,12 @@ public class GridManager : MonoBehaviour
     public GameObject unit;
     public GameObject tileViz;
 
+    GameObject tileContainer;
+
     public void Init()
     {
+        tileContainer = new GameObject("tileContainer");
+
         ReadLevel();        
     }
 
@@ -162,6 +166,7 @@ public class GridManager : MonoBehaviour
 
                         GameObject go = Instantiate(tileViz, n.worldPosition + Vector3.one * .1f, Quaternion.identity) as GameObject;
                         n.tileViz = go;
+                        go.transform.parent = tileContainer.transform;
                         go.SetActive(true);
                     }
 
