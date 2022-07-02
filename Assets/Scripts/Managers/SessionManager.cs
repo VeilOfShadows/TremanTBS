@@ -61,6 +61,8 @@ public class SessionManager : MonoBehaviour
 
     private void Start()
     {
+        //RoomCreator roomCreator = FindObjectOfType<RoomCreator>();
+        //roomCreator.CreateRoom();
         gridManager.Init();
         PlaceUnits();
         InitStateManagers();
