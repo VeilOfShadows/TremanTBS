@@ -21,7 +21,7 @@ public class GridManager : MonoBehaviour
     public bool visualiseCollisions;
 
     List<Vector3> nodeViz = new List<Vector3>();
-    List<Vector3> walkableViz = new List<Vector3>();
+    List<Node> walkableViz = new List<Node>();
     public Vector3 extends = new Vector3(0.8f, 0.8f, 0.8f);
 
     int pos_x;
@@ -177,7 +177,7 @@ public class GridManager : MonoBehaviour
                     }
                     else
                     {
-                        walkableViz.Add(n.worldPosition);
+                        walkableViz.Add(n);
                     }
 
                     grid[x, y, z] = n;
@@ -216,9 +216,12 @@ public class GridManager : MonoBehaviour
                 Gizmos.DrawWireCube(nodeViz[i], extends);
             }
             Gizmos.color = Color.green;
-            for (int i = 0; i < walkableViz.Count; i++)
+            foreach (Node n in walkableViz)
             {
-                Gizmos.DrawWireCube(walkableViz[i], extends);
+                if (n.isWalkable)
+                {
+                    Gizmos.DrawWireCube(n.worldPosition, extends);
+                }
             }
         }   
 
