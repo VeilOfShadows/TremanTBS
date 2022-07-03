@@ -16,7 +16,6 @@ public class RoomCreator : MonoBehaviour
 
     public void CreateRoom()
     {
-        Vector3 position = new Vector3();
         for (int i = 0; i < x; i++)
         {
             for (int j = 0; j < z; j++)

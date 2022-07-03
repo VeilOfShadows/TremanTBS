@@ -8,11 +8,11 @@ public class ObjectSpawner : MonoBehaviour
 
     public void Roll()
     {
-        int roll = Random.RandomRange(0, 100);
+        int roll = Random.Range(0, 100);
         Debug.Log("Roll");
         if (roll <= 30)
         {
-            int temp = Random.RandomRange(0, objects.Count);
+            int temp = Random.Range(0, objects.Count);
             objects[temp].gameObject.SetActive(true);
         }
     }
