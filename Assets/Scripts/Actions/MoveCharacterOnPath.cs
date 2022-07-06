@@ -34,7 +34,7 @@ public class MoveCharacterOnPath : StateActions
             float distance = Vector3.Distance(startNode.worldPosition, targetNode.worldPosition);
             speed = c.moveSpeed / distance;
 
-            Vector3 direction = targetNode.worldPosition - startNode.worldPosition;
+            Vector3 direction = new Vector3(targetNode.worldPosition.x - startNode.worldPosition.x, 0, targetNode.worldPosition.z - startNode.worldPosition.z);
             targetRotation = Quaternion.LookRotation(direction);
             startRotation = c.transform.rotation;
         }

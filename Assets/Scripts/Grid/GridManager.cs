@@ -157,13 +157,13 @@ public class GridManager : MonoBehaviour
 
                     if (n.isWalkable)
                     {
-                        //RaycastHit hit;
-                        //Vector3 origin = n.worldPosition;
-                        //origin.y += yScale - .1f;
-                        //if (Physics.Raycast(origin, Vector3.down, out hit, yScale - .1f))
-                        //{
-                        //    n.worldPosition = hit.point;
-                        //}
+                        RaycastHit hit;
+                        Vector3 origin = n.worldPosition;
+                        origin.y += yScale - .1f;
+                        if(Physics.Raycast(origin, Vector3.down, out hit, yScale - .1f))
+                        {
+                            n.worldPosition = hit.point;
+                        }
 
                         GameObject go = Instantiate(tileViz, new Vector3(n.worldPosition.x, n.worldPosition.y + .1f, n.worldPosition.z), Quaternion.identity) as GameObject;
                         n.tileViz = go;

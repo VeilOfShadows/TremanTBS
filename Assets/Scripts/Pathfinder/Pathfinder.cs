@@ -73,20 +73,44 @@ public class Pathfinder
                 foundPath = RetracePath(startNode, currentNode);
                 break;
             }
-            foreach (Node neighbour in GetNeighbours(currentNode))
+            if(endNode.y == currentNode.y)
             {
-                if (!closedSet.Contains(neighbour))
+                foreach (Node neighbour in GetNeighbours(currentNode))
                 {
-                    float newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbour);
-
-                    if (newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour))
+                    if (!closedSet.Contains(neighbour))
                     {
-                        neighbour.gCost = newMovementCostToNeighbour;
-                        neighbour.hCost = GetDistance(neighbour, endNode);
-                        neighbour.parentNode = currentNode;
-                        if (!openSet.Contains(neighbour))
+                        float newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbour);
+
+                        if (newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour))
                         {
-                            openSet.Add(neighbour);
+                            neighbour.gCost = newMovementCostToNeighbour;
+                            neighbour.hCost = GetDistance(neighbour, endNode);
+                            neighbour.parentNode = currentNode;
+                            if (!openSet.Contains(neighbour))
+                            {
+                                openSet.Add(neighbour);
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach(Node neighbour in GetNeighboursY(currentNode))
+                {
+                    if(!closedSet.Contains(neighbour))
+                    {
+                        float newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbour);
+
+                        if(newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour))
+                        {
+                            neighbour.gCost = newMovementCostToNeighbour;
+                            neighbour.hCost = GetDistance(neighbour, endNode);
+                            neighbour.parentNode = currentNode;
+                            if(!openSet.Contains(neighbour))
+                            {
+                                openSet.Add(neighbour);
+                            }
                         }
                     }
                 }
@@ -101,12 +125,17 @@ public class Pathfinder
         int distX = Mathf.Abs(posA.x - posB.x);
         int distZ = Mathf.Abs(posA.z - posB.z);
 
+        //commented code seems to procoke zigzags when finding a path.
+        //returning 0 favours more square and smooth paths.
+
         if (distX > distZ)
         {
-            return 14* distZ + 10 * (distX - distZ);
+            return 0;
+            //return 14* distZ + 10 * (distX - distZ);
         }
 
-        return 14* distZ + 10 * (distZ - distX);
+        return 0;
+        //return 14* distZ + 10 * (distZ - distX);
 
     }
 
@@ -118,7 +147,11 @@ public class Pathfinder
         {
             for (int z = -1; z <= 1; z++)
             {
-                if (x == 0 && z == 0)
+                if (x == 0 && z == 0 ||
+                    x == -1 && z == -1 ||
+                    x == 1 && z == -1 ||
+                    x == -1 && z == 1 ||
+                    x == 1 && z == 1 )
                 {
                     continue;
                 }
@@ -139,6 +172,43 @@ public class Pathfinder
         }
         return retList;
     }
+    List<Node> GetNeighboursY(Node node)
+    {
+        List<Node> retList = new List<Node>();
+
+        for (int x = -1; x <= 1; x++)
+        {
+            for (int z = -1; z <= 1; z++)
+            {
+                for(int y = -1; y <= 1; y++)
+                {                    
+                    if (x == 0 && z == 0 ||
+                    x == -1 && z == -1 ||
+                    x == 1 && z == -1 ||
+                    x == -1 && z == 1 ||
+                    x == 1 && z == 1)
+                    {
+                        continue;
+                    }
+
+                    int _x = x + node.x;
+                    int _y = y + node.y;
+                    int _z = z + node.z;
+
+                    Node n = GetNode(_x, _y, _z);
+
+                    Node newNode = GetNeighbourY(n);
+
+                    if (newNode != null)
+                    {
+                        retList.Add(newNode);
+                    }
+                }
+            }
+        }
+        return retList;
+    }
+
 
     Node GetNode(int x, int y, int z)
     {
@@ -167,6 +237,29 @@ public class Pathfinder
 
         return retVal;
     }
+    Node GetNeighbourY(Node currentNode)
+    {
+        Node retVal = null;
+
+        if(currentNode != null)
+        {
+            if (currentNode.isWalkable)
+            {
+                Node aboveNode = GetNode(currentNode.x, currentNode.y + 1, currentNode.z);
+                if(aboveNode == null || aboveNode.isAir || character.isCrouched)
+                {
+                    retVal = currentNode;
+                }
+                else
+                {
+                    
+                }
+            }
+        }
+
+        return retVal;
+    }
+
 
     List<Node> RetracePath(Node start, Node end)
     {
