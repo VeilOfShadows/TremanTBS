@@ -19,6 +19,7 @@ public class GridManager : MonoBehaviour
     int maxY;
 
     public bool visualiseCollisions;
+    public bool visualiseAllCollisions;
 
     List<Vector3> nodeViz = new List<Vector3>();
     List<Node> walkableViz = new List<Node>();
@@ -217,6 +218,27 @@ public class GridManager : MonoBehaviour
     {
         if (visualiseCollisions)
         {
+            if(visualiseAllCollisions)
+            {
+                foreach(Node n in grid)
+                {
+                    if(n.isWalkable)
+                    {
+                        Gizmos.color = Color.green;
+                    }
+                    else if(n.obstacle)
+                    {
+                        Gizmos.color = Color.red;
+                    }
+                    else if(n.isAir)
+                    {
+                        Gizmos.color = new Color(255f, 255f, 255f, 5f);
+                    }
+                    Gizmos.DrawWireCube(n.worldPosition, extends);
+                }
+                return;
+            }
+
             Gizmos.color = Color.red;
             for (int i = 0; i < nodeViz.Count; i++)
             {
@@ -230,7 +252,9 @@ public class GridManager : MonoBehaviour
                     Gizmos.DrawWireCube(n.worldPosition, extends);
                 }
             }
-        }   
+        }
 
+
+        
     }
 }
