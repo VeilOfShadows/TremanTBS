@@ -15,3 +15,4 @@ MonoBehaviour:
   stateManagerPrefab: {fileID: 3579605510277517889, guid: 19882c3b0f6247f4881ff803477f096f, type: 3}
   characters:
   - {fileID: 0}
+  - {fileID: 0}

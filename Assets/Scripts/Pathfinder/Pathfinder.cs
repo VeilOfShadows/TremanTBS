@@ -149,9 +149,20 @@ public class Pathfinder
     {
         Node retVal = null;
 
-        if (currentNode.isWalkable)
+        if(currentNode != null)
         {
-            retVal = currentNode;
+            if (currentNode.isWalkable)
+            {
+                Node aboveNode = GetNode(currentNode.x, currentNode.y + 1, currentNode.z);
+                if(aboveNode == null || aboveNode.isAir || character.isCrouched)
+                {
+                    retVal = currentNode;
+                }
+                else
+                {
+                    
+                }
+            }
         }
 
         return retVal;

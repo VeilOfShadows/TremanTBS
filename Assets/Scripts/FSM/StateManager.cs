@@ -5,11 +5,30 @@ using UnityEngine;
 public abstract class StateManager : MonoBehaviour
 {
     public State currentState;
+    public State startingState;
     public bool forceExit;
 
     public Node previousNode;
     public Node currentNode;
     public float delta;
+
+    public PlayerHolder playerHolder;
+    public GridCharacter currentCharacter
+    {
+        get { return _currentCharacter; }
+        set
+        {
+            if(_currentCharacter != null)
+            {
+                _currentCharacter.OnDeselect(playerHolder);
+            }
+
+            _currentCharacter = value;
+
+        }
+    }
+
+    GridCharacter _currentCharacter;
 
     protected Dictionary<string, State> allStates = new Dictionary<string, State>();
 
@@ -41,6 +60,11 @@ public abstract class StateManager : MonoBehaviour
         }
 
         currentState = targetState;
+    }
+
+    public void SetStartingState()
+    {
+        currentState = startingState;
     }
 
     State GetState(string id)

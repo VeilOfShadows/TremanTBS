@@ -17,6 +17,7 @@ public class PlayerHolder : ScriptableObject
     {
         stateManagerObject = Instantiate(stateManagerPrefab);
         stateManager = stateManagerObject.GetComponent<StateManager>();
+        stateManager.playerHolder = this;
     }
 
     public void RegisterCharacter(GridCharacter c)
