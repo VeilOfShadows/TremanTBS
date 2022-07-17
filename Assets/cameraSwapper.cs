@@ -10,7 +10,7 @@ public class cameraSwapper : MonoBehaviour
     [SerializeField]
     private int index = 0;
     public bool isCoroutine = false;
-    public float transitionTime;
+    public float swapCooldown;
 
     public void Start()
     {
@@ -21,7 +21,7 @@ public class cameraSwapper : MonoBehaviour
     {
         //transitionTime = this.gameObject.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time;
         this.gameObject.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = tTime;
-        transitionTime = tTime;
+        swapCooldown = tTime;
     }
 
     private void Update()
@@ -61,7 +61,7 @@ public class cameraSwapper : MonoBehaviour
             cameras[index].SetActive(true);
             cameras[index - 1].SetActive(false);
         }
-        yield return new WaitForSeconds(transitionTime);
+        yield return new WaitForSeconds(swapCooldown);
         isCoroutine = false;
         yield return null;
     }
@@ -85,7 +85,7 @@ public class cameraSwapper : MonoBehaviour
             cameras[index].SetActive(true);
             cameras[index + 1].SetActive(false);
         }
-        yield return new WaitForSeconds(transitionTime);
+        yield return new WaitForSeconds(swapCooldown);
         isCoroutine = false;
         yield return null;
     }
