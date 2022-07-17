@@ -90,6 +90,3 @@ public class cameraSwapper : MonoBehaviour
         yield return null;
     }
 }
-
-// have slider - seperate accept button with script attached, script has public slider(slider is the type) add using unity.ui (then you can access the slider type). Drag and drop the slider intp
-// the script after. Public cameraSwapper (creates an instance of the cameraSwapperScript) make a function calles updateValue function from the cameraSwapper script and pass in the slider.value
