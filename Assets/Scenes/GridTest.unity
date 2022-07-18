@@ -9269,6 +9269,7 @@ GameObject:
   - component: {fileID: 1078465565}
   - component: {fileID: 1078465564}
   - component: {fileID: 1078465563}
+  - component: {fileID: 1078465566}
   m_Layer: 5
   m_Name: SubmitButton
   m_TagString: Untagged
@@ -9340,7 +9341,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1858788889}
+      - m_Target: {fileID: 1078465566}
         m_TargetAssemblyTypeName: sliderValueGrabber, Assembly-CSharp
         m_MethodName: UpdateSliderValue
         m_Mode: 1
@@ -9390,6 +9391,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1078465561}
   m_CullTransparentMesh: 1
+--- !u!114 &1078465566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1078465561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e85074f8d760d9e4f833f7278bae203b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slider: {fileID: 1858788888}
+  sliderValue: 0
+  finalValue: 0
+  cameraUpdater: {fileID: 1561364662}
 --- !u!4 &1087735874 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5860274498516597658, guid: b51caf0a7905b534bbfc62d7e1125d6f, type: 3}
@@ -16594,7 +16611,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1858788887}
   - component: {fileID: 1858788888}
-  - component: {fileID: 1858788889}
   m_Layer: 5
   m_Name: CamSpeedSlider
   m_TagString: Untagged
@@ -16675,22 +16691,6 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1858788889
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1858788886}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e85074f8d760d9e4f833f7278bae203b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  slider: {fileID: 1858788888}
-  sliderValue: 0
-  finalValue: 0
-  cameraUpdater: {fileID: 1561364662}
 --- !u!1001 &1861379191
 PrefabInstance:
   m_ObjectHideFlags: 0
