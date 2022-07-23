@@ -14,12 +14,13 @@ public class SessionManager : MonoBehaviour
 
     public LineRenderer pathViz;
 
-
     public GridManager gridManager;
 
     bool isInit;
 
     bool isPathfinding;
+
+    public int frameRate;
 
     #endregion
 
@@ -32,6 +33,7 @@ public class SessionManager : MonoBehaviour
         PlaceUnits();
         InitStateManagers();
         isInit = true;
+        Application.targetFrameRate = frameRate;
     }
 
     void InitStateManagers()

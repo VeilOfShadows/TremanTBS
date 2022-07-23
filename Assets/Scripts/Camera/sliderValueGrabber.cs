@@ -14,7 +14,7 @@ public class sliderValueGrabber : MonoBehaviour
     {
         sliderValue = slider.value;
         finalValue = sliderValue + 0.5f;
-        cameraUpdater.GetComponent<cameraSwapper>().transitionTimeUpdate(finalValue);
+        cameraUpdater.GetComponent<CameraSwapper>().transitionTimeUpdate(finalValue);
         
     }
 

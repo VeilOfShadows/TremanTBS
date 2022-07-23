@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 
-public class cameraSwapper : MonoBehaviour
+public class CameraSwapper : MonoBehaviour
 {
     [SerializeField]
     private List<GameObject> cameras = new List<GameObject>();
@@ -42,6 +42,14 @@ public class cameraSwapper : MonoBehaviour
         }
     }
 
+    //returns current cam index number;
+    public int IndexCount()
+    {
+        return index;
+    }
+
+
+    //////////////Coroutines/////////////////////////////
     public IEnumerator rotateCamClockwise()
     {
         if (isCoroutine)
