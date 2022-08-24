@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Fade
-  m_Shader: {fileID: -6465566751694194690, guid: eb736b8ab2fe6ef43a1b2f71c169076b, type: 3}
+  m_Name: DirectionalFade
+  m_Shader: {fileID: -6465566751694194690, guid: 1d9e97d908546f2499b8baac53a49480, type: 3}
   m_ShaderKeywords: _EMISSION _METALLICSPECGLOSSMAP
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
@@ -82,8 +82,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - Vector1_1: 13
-    - Vector1_80816b7746b34d0795745542631b1604: -1
-    - Vector1_97d29c043c7147f1bff9c0759fd41888: 10
+    - Vector1_80816b7746b34d0795745542631b1604: 0
+    - Vector1_97d29c043c7147f1bff9c0759fd41888: 0.1
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
