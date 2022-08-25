@@ -3,24 +3,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 
-public class CameraSwapper : MonoBehaviour
+public class CameraController : MonoBehaviour
 {
+    [Header("Camera Information")]
     [SerializeField]
-    private List<GameObject> cameras = new List<GameObject>();
+    private GameObject activeCam;
     [SerializeField]
     private int index = 0;
-    public bool isCoroutine = false;
-    public float swapCooldown;
+    [SerializeField]
+    private List<GameObject> cameras = new List<GameObject>();
+
+    [Header("Coroutine Information")]
+    [SerializeField]
+    private bool isCoroutine = false;
+    [SerializeField]
+    private float swapCooldown;
+
+    [Header("Camera Movement")]
+    [SerializeField]
+    private GameObject camHolder;
+    [SerializeField]
+    private float movementSpeed;
+    
+    CinemachineBrain cinemachineBrain;
+    float verticalInput;
+    float horizontalInput;
 
     public void Start()
     {
-        transitionTimeUpdate(this.gameObject.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time);
+        activeCam = cameras[index];
+        cinemachineBrain = this.gameObject.GetComponent<CinemachineBrain>();
+        //transitionTimeUpdate(cinemachineBrain.m_DefaultBlend.m_Time);
     }
 
     public void transitionTimeUpdate(float tTime)
     {
         //transitionTime = this.gameObject.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time;
-        this.gameObject.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = tTime;
+        cinemachineBrain.m_DefaultBlend.m_Time = tTime;
         swapCooldown = tTime;
     }
 
@@ -40,6 +59,12 @@ public class CameraSwapper : MonoBehaviour
                 StartCoroutine(rotateCamCounterClockwise());
             }
         }
+
+        verticalInput = Input.GetAxis("Vertical");
+        horizontalInput = Input.GetAxis("Horizontal");
+        
+        camHolder.transform.position += new Vector3(verticalInput * activeCam.transform.forward.x, 0, verticalInput * activeCam.transform.forward.z) * Time.deltaTime * movementSpeed;
+        camHolder.transform.position += new Vector3(horizontalInput * activeCam.transform.right.x, 0, horizontalInput * activeCam.transform.right.z) * Time.deltaTime * movementSpeed;
     }
 
     //returns current cam index number;
@@ -61,12 +86,14 @@ public class CameraSwapper : MonoBehaviour
         {
             index = 0;
             cameras[index].SetActive(true);
+            activeCam = cameras[index];
             cameras[index + 3].SetActive(false);
         }
         else if (index != 3)
         {
             index++;
             cameras[index].SetActive(true);
+            activeCam = cameras[index];
             cameras[index - 1].SetActive(false);
         }
         yield return new WaitForSeconds(swapCooldown);

@@ -4,22 +4,22 @@ using UnityEngine;
 
 public interface ISelectable
 {
-    void OnSelect(PlayerHolder player);
+    void OnSelect();
 }
 
 public interface IDeselect
 {
-    void OnDeselect(PlayerHolder player);
+    void OnDeselect();
 }
 
 public interface IHighlight
 {
-    void OnHighlight(PlayerHolder player);
+    void OnHighlight();
 }
 
 public interface IDeHighlight
 {
-    void OnDeHighlight(PlayerHolder player);
+    void OnDeHighlight();
 }
 
 public interface IDetectable

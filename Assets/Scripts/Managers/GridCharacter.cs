@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GridCharacter : MonoBehaviour, ISelectable, IDeselect, IHighlight, IDeHighlight, IDetectable
 {
-    public PlayerHolder owner;
+    //public PlayerHolder owner;
 
     public float moveSpeed;
 
@@ -12,11 +12,12 @@ public class GridCharacter : MonoBehaviour, ISelectable, IDeselect, IHighlight, 
 
     [HideInInspector]
     public Node currentNode;
-    [HideInInspector]
+    //[HideInInspector]
     public GameObject highlighter;
     public bool isSelected;
 
     public List<Node> currentPath;
+    public bool isPlayer;
 
     public void LoadPath(List<Node> path)
     {
@@ -25,31 +26,30 @@ public class GridCharacter : MonoBehaviour, ISelectable, IDeselect, IHighlight, 
 
     public void OnInit()
     {
-        owner.RegisterCharacter(this);
+        //owner.RegisterCharacter(this);
         highlighter.SetActive(false);
     }
 
-    public void OnSelect(PlayerHolder player)
+    public void OnSelect()
     {
         highlighter.SetActive(true);
         isSelected = true;
-        player.stateManager.currentCharacter = this;
+        //player.stateManager.currentCharacter = this;
     }
 
-    public void OnDeselect(PlayerHolder player)
+    public void OnDeselect()
     {
         isSelected = false;
         highlighter.SetActive(false);
     }
 
-    public void OnHighlight(PlayerHolder player)
+    public void OnHighlight()
     {
-        
         highlighter.SetActive(true);
 
     }
 
-    public void OnDeHighlight(PlayerHolder player)
+    public void OnDeHighlight()
     {
         if(!isSelected)
         {

@@ -4,20 +4,22 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class sliderValueGrabber : MonoBehaviour
+public class SliderValueGrabber : MonoBehaviour
 {
+    [SerializeField]
+    Slider slider;
+    [SerializeField]
+    float sliderValue;
+    [SerializeField]
+    TextMeshProUGUI text;
 
-    public Slider slider;
-    public float sliderValue;
-    public float finalValue;
-    public GameObject cameraUpdater;
-    public TextMeshProUGUI text;
+    float finalValue;
 
     public void UpdateSliderValue()
     {
         sliderValue = slider.value;
         finalValue = sliderValue + 0.5f;
-        cameraUpdater.GetComponent<CameraSwapper>().transitionTimeUpdate(finalValue);
+        Camera.main.GetComponent<CameraController>().transitionTimeUpdate(finalValue);
         
     }
 

@@ -1,10 +1,10 @@
 using System.Collections;
 using UnityEngine;
 
-public class cameraZoom : MonoBehaviour
+public class CameraZoom : MonoBehaviour
 {
-    public float floorY = -11f;
-    public float ceilingY = 11f;
+    public float floorY;
+    public float ceilingY;
     public float currentY;
     public float distance;
     public float speed;
@@ -12,7 +12,7 @@ public class cameraZoom : MonoBehaviour
     public float buffer;
     public bool isMovingDown;
     public bool isMovingUp;
-    public CameraSwapper camSwapper;
+    public CameraController camSwapper;
     public int camIndex;
 
     void Update()
@@ -21,7 +21,7 @@ public class cameraZoom : MonoBehaviour
 
         //checking for forward scroll
         //if (controller.IndexCount() == 0 || controller.IndexCount() == 2)
-        if (Input.mouseScrollDelta.y > 0)
+        if (Input.mouseScrollDelta.y < 0)
         {
             //currentY = transform.position.y; - change refs of transform.position.y to currentY to revert change
             endY = transform.position.y - distance;
@@ -37,7 +37,7 @@ public class cameraZoom : MonoBehaviour
         }
 
         //checking for backward scroll
-        if (Input.mouseScrollDelta.y < 0)
+        if (Input.mouseScrollDelta.y > 0)
         {
             //currentY = transform.position.y; - change refs of transform.position.y to currentY to revert change
             endY = transform.position.y + distance;
