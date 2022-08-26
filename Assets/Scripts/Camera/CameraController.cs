@@ -112,12 +112,14 @@ public class CameraController : MonoBehaviour
         {
             index = 3;
             cameras[index].SetActive(true);
+            activeCam = cameras[index];
             cameras[index - 3].SetActive(false);
         }
         else if (index != 0)
         {
             index--;
             cameras[index].SetActive(true);
+            activeCam = cameras[index];
             cameras[index + 1].SetActive(false);
         }
         yield return new WaitForSeconds(swapCooldown);

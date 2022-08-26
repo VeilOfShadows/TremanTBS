@@ -9,6 +9,9 @@ public class HandleMouseInteractions : MonoBehaviour
     public FiniteStateMachine fsm;
     public LayerMask layerMask;
 
+    public Transform previousTransform;
+    public Transform currentTransform;
+
     public void Update()
     {
         if(previousCharacter != null)
@@ -20,13 +23,20 @@ public class HandleMouseInteractions : MonoBehaviour
         RaycastHit hit;
         if(Physics.Raycast(ray, out hit, 1000, layerMask))
         {
-            Node n = sm.gridManager.GetNode(hit.point);
-            IDetectable detectable = hit.transform.GetComponent<IDetectable>();
-            if(detectable != null)
+            Node n = null;// = hit.transform.GetComponentInChildren<TileVizConnecter>().node;//sm.gridManager.GetNode(hit.point);
+            currentTransform = hit.transform;
+            if(currentTransform != previousTransform)
             {
-                n = detectable.OnDetect();
+                previousTransform = currentTransform;
+                n = hit.transform.GetComponentInChildren<TileVizConnecter>().node;
+                IDetectable detectable = hit.transform.GetComponent<IDetectable>();
+                if(detectable != null)
+                {
+                    n = detectable.OnDetect();
+                }
             }
 
+            //Debug.Log(n.worldPosition);
             if(n != null)
             {
                 //if(n.character != null)

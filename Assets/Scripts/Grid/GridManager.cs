@@ -7,10 +7,10 @@ public class GridManager : MonoBehaviour
     #region Variables
     Node[,,] grid;
     [SerializeField]
-    float xzScale = 1.5f;
+    float xzScale = 1f;//1.5
 
     [SerializeField]
-    float yScale = 2;
+    float yScale = 1;//2
 
     Vector3 minPos;
 
@@ -168,6 +168,7 @@ public class GridManager : MonoBehaviour
 
                         GameObject go = Instantiate(tileViz, new Vector3(n.worldPosition.x, n.worldPosition.y + .1f, n.worldPosition.z), Quaternion.identity) as GameObject;
                         n.tileViz = go;
+                        go.GetComponentInChildren<TileVizConnecter>().node = n;
                         go.transform.parent = tileContainer.transform;
                         go.SetActive(true);
                     }

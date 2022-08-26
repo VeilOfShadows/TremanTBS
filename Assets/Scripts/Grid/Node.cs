@@ -26,5 +26,4 @@ public class Node
     }
 
     public Node parentNode;
-
 }
