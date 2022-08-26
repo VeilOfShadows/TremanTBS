@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HandleMouseInteractions : MonoBehaviour /*: StateActions*/
+public class HandleMouseInteractions : MonoBehaviour
 {
     GridCharacter previousCharacter;
     public Session sm;
+    public FiniteStateMachine fsm;
+    public LayerMask layerMask;
 
     public void Update()
     {
@@ -16,7 +18,7 @@ public class HandleMouseInteractions : MonoBehaviour /*: StateActions*/
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if(Physics.Raycast(ray, out hit, 1000))
+        if(Physics.Raycast(ray, out hit, 1000, layerMask))
         {
             Node n = sm.gridManager.GetNode(hit.point);
             IDetectable detectable = hit.transform.GetComponent<IDetectable>();
@@ -27,41 +29,65 @@ public class HandleMouseInteractions : MonoBehaviour /*: StateActions*/
 
             if(n != null)
             {
-                if(n.character != null)
+                //if(n.character != null)
+                //{
+                //    //highlighted your own unit
+                //    if(n.character.isPlayer == true)
+                //    {
+                //        n.character.OnHighlight();
+                //        previousCharacter = n.character;
+                //        sm.ClearPath();
+                //        if(Input.GetMouseButtonDown(0))
+                //        {
+                //            sm.currentCharacter = n.character;
+                //            n.character.OnSelect();
+                //        }
+                //    }
+                //    //else //highlighted enemy unit
+                //    //{
+
+                //    //}
+                //}
+
+                if(fsm.gameState == States.PlayerDecision)
                 {
-                    //highlighted your own unit
-                    if(n.character.isPlayer == true)
+                    if(sm.currentCharacter != null && n.character == null)
                     {
-                        n.character.OnHighlight();
-                        previousCharacter = n.character;
-                        sm.ClearPath();
+                        //click to select a node to start walking on the path
                         if(Input.GetMouseButtonDown(0))
                         {
-                            sm.currentCharacter = n.character;
-                            n.character.OnSelect();
+                            if(sm.currentCharacter.currentPath != null || sm.currentCharacter.currentPath.Count > 0)
+                            {
+                                fsm.gameState = States.PlayerMovement;
+                                Debug.Log("Game state is: " + fsm.gameState);
+                                n.tileViz.SetActive(false);
+                               // sm.StartCoroutine(sm.MoveCharacterAlongPath());
+                            }
                         }
-                    }
-                    //else //highlighted enemy unit
-                    //{
-
-                    //}
-                }
-
-                //if the session has a character and the node does not contain a character
-                if(sm.currentCharacter != null && n.character == null)
-                {
-                    //click to select a node to start walking on the path
-                    if(Input.GetMouseButtonDown(0))
-                    {
-                        if(sm.currentCharacter.currentPath != null || sm.currentCharacter.currentPath.Count > 0)
+                        else
                         {
-                            //sm.StartCoroutine(sm.MoveCharacterAlongPath());
-                            Debug.Log("ATTEMPTING MOVE");
+                            PathDetection(n);
                         }
                     }
-                    else
+                }
+                else if(fsm.gameState == States.EnemyDecision)
+                {
+                    if(sm.currentCharacter != null && n.character == null)
                     {
-                        PathDetection(n);
+                        //click to select a node to start walking on the path
+                        if(Input.GetMouseButtonDown(0))
+                        {
+                            if(sm.currentCharacter.currentPath != null || sm.currentCharacter.currentPath.Count > 0)
+                            {
+                                fsm.gameState = States.EnemyMovement;
+                                Debug.Log("Game state is: " + fsm.gameState);
+                                sm.StartCoroutine(sm.MoveCharacterAlongPath());
+                            }
+                        }
+                        else
+                        {
+                            PathDetection(n);
+                        }
                     }
                 }
                 //else // no character selected

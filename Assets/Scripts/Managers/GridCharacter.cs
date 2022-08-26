@@ -7,7 +7,7 @@ public class GridCharacter : MonoBehaviour, ISelectable, IDeselect, IHighlight, 
     //public PlayerHolder owner;
 
     public float moveSpeed;
-
+    public float initiative;
     public bool isCrouched;
 
     [HideInInspector]
@@ -19,6 +19,8 @@ public class GridCharacter : MonoBehaviour, ISelectable, IDeselect, IHighlight, 
     public List<Node> currentPath;
     public bool isPlayer;
 
+    public Session sm;
+
     public void LoadPath(List<Node> path)
     {
         currentPath = path;
@@ -28,6 +30,12 @@ public class GridCharacter : MonoBehaviour, ISelectable, IDeselect, IHighlight, 
     {
         //owner.RegisterCharacter(this);
         highlighter.SetActive(false);
+    }
+
+    public void AddToCombat()
+    { 
+        sm.characters.Add(this);    
+        sm.fsm.unitsInCombat.Add(this);    
     }
 
     public void OnSelect()

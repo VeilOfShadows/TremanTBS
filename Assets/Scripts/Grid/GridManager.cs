@@ -30,7 +30,7 @@ public class GridManager : MonoBehaviour
     int pos_z;
     #endregion
 
-    public GameObject unit;
+    //public GameObject unit;
     public GameObject tileViz;
 
     GameObject tileContainer;

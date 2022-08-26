@@ -9,8 +9,10 @@ public class Session : MonoBehaviour
     public GridCharacter currentCharacter;
     public Node currentNode;
     public Node previousNode;
-
+    public FiniteStateMachine fsm;
     public float delta;
+    
+
 
     public LineRenderer pathViz;
 
@@ -37,6 +39,7 @@ public class Session : MonoBehaviour
         foreach(GridCharacter u in units)
         {
             u.OnInit();
+            u.AddToCombat();
             Node n = gridManager.GetNode(u.transform.position);
             if(n != null)
             {
@@ -46,6 +49,7 @@ public class Session : MonoBehaviour
             }
 
         }
+        fsm.NewTurn();
     }
 
 
@@ -105,115 +109,93 @@ public class Session : MonoBehaviour
     }
     #endregion
 
-    //public IEnumerator MoveCharacterAlongPath()
-    //{
-    //    //bool isInit;
-    //    float t = 2;
-    //    //float rotationT;
-    //    float speed;
+    public IEnumerator MoveCharacterAlongPath()
+    {
+        currentCharacter.currentNode.character = null;
+        currentCharacter.transform.position = currentCharacter.currentPath[currentCharacter.currentPath.Count-1].worldPosition;
+        currentCharacter.currentNode = currentCharacter.currentPath[currentCharacter.currentPath.Count-1];
+        currentCharacter.currentNode.character = currentCharacter;
+        ClearPath();
+
+        if(currentCharacter.isPlayer)
+        {
+            fsm.gameState = States.PlayerDecision;
+            Debug.Log("Game state is: " + fsm.gameState);
+        }
+        else if(!currentCharacter.isPlayer)
+        {
+            fsm.gameState = States.EnemyDecision;
+            Debug.Log("Game state is: " + fsm.gameState);
+        }
+
+        yield return null;
+    }
+    //    int index = 0;
+    //    bool init;
+    //    float t = 1;
     //    Node startNode;
     //    Node targetNode;
-    //    int index = 0;
-    //    /*Walking along a path
-    //     * 
-    //    */
-    //    startNode = currentCharacter.currentNode;
-    //    targetNode = currentCharacter.currentPath[currentCharacter.currentPath.Count];
-    //    float _t = t - 1;
-    //    _t = Mathf.Clamp01(_t);
-    //    t = _t;
-    //    float distance = Vector3.Distance(startNode.worldPosition, targetNode.worldPosition);
-    //    speed = currentCharacter.moveSpeed / distance;
+    //    Node nextNode;
+    //    float speed;
 
-    //    //    Vector3 direction = new Vector3(targetNode.worldPosition.x - startNode.worldPosition.x, 0, targetNode.worldPosition.z - startNode.worldPosition.z);
-    //    //    targetRotation = Quaternion.LookRotation(direction);
-    //    //    startRotation = c.transform.rotation;
+    //    GridCharacter c = currentCharacter;
+    //    bool isMoving = false;
+    //    //set spee value
+    //    //t = Time.deltaTime * currentCharacter.moveSpeed;
+    //    targetNode = c.currentPath[c.currentPath.Count - 1];
 
-    //    t += delta * speed;
-
-    //    if(t > 1)
+    //    //while(targetNode.character != c)
+    //    //{
+    //    for(int i = 0; i < c.currentPath.Count; i++)
     //    {
-    //        //    isInit = false;
-
-    //        currentCharacter.currentNode.character = null;
-    //        currentCharacter.currentNode = targetNode;
-    //        currentCharacter.currentNode.character = currentCharacter;
-
-    //        index++;
-
-    //        if(index > currentCharacter.currentPath.Count - 1)
+    //        if(!isMoving)
     //        {
-    //            //we moved onto our path
-    //            t = 1;
-    //            index = 0;
+    //            isMoving = true;
+    //            Debug.Log("MOVING");
+    //            if(targetNode.character == c)
+    //            {
+    //                yield break;
+    //            }
 
-    //            //states.SetStartingState();
+    //            //no character - break
+    //            if(c == null || index > c.currentPath.Count - 1)
+    //            {
+    //                yield break;
+    //            }
+
+    //            //set the start and target nodes
+    //            startNode = c.currentNode;
+    //            nextNode = c.currentPath[index];
+
+    //            float _t = t - 1;
+    //            _t = Mathf.Clamp01(_t);
+    //            t = _t;
+    //            float distance = Vector3.Distance(startNode.worldPosition, targetNode.worldPosition);
+    //            speed = c.moveSpeed / distance;
+
+    //            t += delta * speed;
+
+    //            //set the character to be on the next node
+    //            c.currentNode.character = null;
+    //            c.currentNode = nextNode;
+    //            c.currentNode.character = c;
+
+    //            index++;
+
+    //            if(index > c.currentPath.Count - 1)
+    //            {
+    //                //we have reached the path
+    //                //t = 1;
+    //                index = 0;
+    //            }
+
+
+    //            //Vector3 tp = Vector3.Lerp(startNode.worldPosition, nextNode.worldPosition, currentCharacter.moveSpeed);
+    //            c.transform.position = Vector3.Lerp(c.currentNode.worldPosition, nextNode.worldPosition, 0.1f);
+    //            yield return new WaitForSeconds(1f);
+    //            isMoving = false;
+    //            yield return null;
     //        }
-    //    }
-
-    //    Vector3 tp = Vector3.Lerp(startNode.worldPosition, targetNode.worldPosition, t);
-    //    currentCharacter.transform.position = tp;
-
-    //    //Quaternion targetRotation;
-    //    //Quaternion startRotation;
-
-    //    //GridCharacter c = currentCharacter;
-    //    ////if(!isInit)
-    //    ////{
-    //    //    if(c == null || index > c.currentPath.Count - 1)
-    //    //    {
-    //    //        states.SetStartingState();
-    //    //        return;
-    //    //    }
-
-    //    //    isInit = true;
-    //    //    startNode = c.currentNode;
-    //    //    targetNode = c.currentPath[index];
-    //    //    float _t = t - 1;
-    //    //    _t = Mathf.Clamp01(_t);
-    //    //    t = _t;
-    //    //    float distance = Vector3.Distance(startNode.worldPosition, targetNode.worldPosition);
-    //    //    speed = c.moveSpeed / distance;
-
-    //    //    Vector3 direction = new Vector3(targetNode.worldPosition.x - startNode.worldPosition.x, 0, targetNode.worldPosition.z - startNode.worldPosition.z);
-    //    //    targetRotation = Quaternion.LookRotation(direction);
-    //    //    startRotation = c.transform.rotation;
-    //    ////}
-
-    //    //t += delta * speed;
-    //    //rotationT += states.delta * c.moveSpeed * 2;
-
-    //    //if(rotationT > 1)
-    //    //{
-    //    //    rotationT = 1;
-    //    //}
-
-    //    //c.transform.rotation = Quaternion.Slerp(startRotation, targetRotation, rotationT);
-
-    //    //if(t > 1)
-    //    //{
-    //    //    isInit = false;
-
-    //    //    c.currentNode.character = null;
-    //    //    c.currentNode = targetNode;
-    //    //    c.currentNode.character = c;
-
-    //    //    index++;
-
-    //    //    if(index > c.currentPath.Count - 1)
-    //    //    {
-    //    //        //we moved onto our path
-    //    //        t = 1;
-    //    //        index = 0;
-
-    //    //        states.SetStartingState();
-    //    //    }
-    //    //}
-
-    //    //Vector3 tp = Vector3.Lerp(startNode.worldPosition, targetNode.worldPosition, t);
-    //    //c.transform.position = tp;
-    //    yield return null;
+    //    }    
     //}
-
-    
 }
